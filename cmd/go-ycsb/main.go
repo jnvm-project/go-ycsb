@@ -69,6 +69,8 @@ import (
 	//_ "github.com/pingcap/go-ycsb/db/minio"
 	// Register gomap
 	_ "github.com/pingcap/go-ycsb/db/gomap"
+	// Register redis-pmem database
+	_ "github.com/pingcap/go-ycsb/db/predis"
 )
 
 var (
