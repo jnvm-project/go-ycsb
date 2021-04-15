@@ -2,7 +2,7 @@ package gomap
 
 import (
 	"context"
-	"fmt"
+//	"fmt"
 
 	"github.com/pingcap/go-ycsb/pkg/util"
 	"github.com/magiconair/properties"
@@ -20,7 +20,7 @@ type mapState struct {
  */
 
 type mapDB struct {
-	m	map[string][]byte
+	m	map[string]map[string][]byte
 }
 
 func (db *mapDB) Close() error {
@@ -38,30 +38,33 @@ func (db *mapDB) CleanupThread(_ context.Context) {
 
 func (db *mapDB) Read(ctx context.Context, table string, key string, fields []string) (map[string][]byte, error) {
 	if len(fields) == 0 { //
-		fmt.Printf("Read fields=NULL")
+		//fmt.Printf("Read fields=NULL")
 		ret := map[string][]byte {
-			"key": db.m[key],
+			"key": db.m[table][key],
 		}
 		return ret, nil
 	} else {
-		fmt.Printf("Read fields=%s\n", fields)
+		//fmt.Printf("Read fields=%s\n", fields)
 		ret := map[string][]byte {
-			"key": db.m[key],
+			"key": db.m[table][key],
 		}
 		return ret, nil
 	}
 }
 
 func (db *mapDB) Scan(ctx context.Context, table string, startKey string, count int, fields []string) ([]map[string][]byte, error) {
-	fmt.Printf("Scan table=%s count=%d\n", table, count)
+	//fmt.Printf("Scan table=%s count=%d\n", table, count)
 	return nil, nil
 }
 
 func (db *mapDB) Update(ctx context.Context, table string, key string, values map[string][]byte) error {
 	pairs := util.NewFieldPairs(values)
 	for _, p := range pairs {
-		fmt.Printf("Update table=%s, key=%s field=%s\n", table, key, p.Field)
-		db.m[key]=p.Value
+		//fmt.Printf("Update table=%s, key=%s field=%s\n", table, key, p.Field)
+		if db.m[table] == nil {
+			db.m[table] = make(map[string][]byte)
+		}
+		db.m[table][key]=p.Value
 	}
 
 	return nil
@@ -70,16 +73,19 @@ func (db *mapDB) Update(ctx context.Context, table string, key string, values ma
 func (db *mapDB) Insert(ctx context.Context, table string, key string, values map[string][]byte) error {
 	pairs := util.NewFieldPairs(values)
 	for _, p := range pairs {
-		fmt.Printf("Insert table=%s, key=%s, field=%s\n", table, key, p.Field)
-		db.m[key]=p.Value
+		//fmt.Printf("Insert table=%s, key=%s, field=%s\n", table, key, p.Field)
+		if db.m[table] == nil { //shoudl never happen
+			db.m[table] = make(map[string][]byte)
+		}
+		db.m[table][key]=p.Value
 	}
 
 	return nil
 }
 
 func (db *mapDB) Delete(ctx context.Context, table string, key string) error {
-	fmt.Printf("Delete table=%s key=%s\n", table, key)
-	delete(db.m, key)
+	//fmt.Printf("Delete table=%s key=%s\n", table, key)
+	delete(db.m[table], key)
 
 	return nil
 }
@@ -95,7 +101,7 @@ func (mapDBCreator) Create(p *properties.Properties) (ycsb.DB, error) {
 
 	/* make([]T, length): alloc and initialize the map + return value
 	 * new : alloc + return ptr */
-	db.m = make(map[string][]byte)
+	db.m = map[string]map[string][]byte{}
 
 	return db, nil
 }

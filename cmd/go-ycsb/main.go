@@ -37,36 +37,36 @@ import (
 	"github.com/pingcap/go-ycsb/pkg/ycsb"
 	"github.com/spf13/cobra"
 
-	// Register basic database
-	_ "github.com/pingcap/go-ycsb/db/basic"
-	// Register MySQL database
-	_ "github.com/pingcap/go-ycsb/db/mysql"
-	// Register TiKV database
-	_ "github.com/pingcap/go-ycsb/db/tikv"
-	// Register PostgreSQL database
-	_ "github.com/pingcap/go-ycsb/db/pg"
-	// Register Aerospike database
-	_ "github.com/pingcap/go-ycsb/db/aerospike"
-	// Register Badger database
-	_ "github.com/pingcap/go-ycsb/db/badger"
-	// Register RocksDB database
-	_ "github.com/pingcap/go-ycsb/db/rocksdb"
-	// Register Spanner database
-	_ "github.com/pingcap/go-ycsb/db/spanner"
-	// Register pegasus database
-	_ "github.com/pingcap/go-ycsb/db/pegasus"
-	// Register sqlite database
-	_ "github.com/pingcap/go-ycsb/db/sqlite"
-	// Register cassandra database
-	_ "github.com/pingcap/go-ycsb/db/cassandra"
-	// Register mongodb database
-	_ "github.com/pingcap/go-ycsb/db/mongodb"
+	//// Register basic database
+	//_ "github.com/pingcap/go-ycsb/db/basic"
+	//// Register MySQL database
+	//_ "github.com/pingcap/go-ycsb/db/mysql"
+	//// Register TiKV database
+	//_ "github.com/pingcap/go-ycsb/db/tikv"
+	//// Register PostgreSQL database
+	//_ "github.com/pingcap/go-ycsb/db/pg"
+	//// Register Aerospike database
+	//_ "github.com/pingcap/go-ycsb/db/aerospike"
+	//// Register Badger database
+	//_ "github.com/pingcap/go-ycsb/db/badger"
+	//// Register RocksDB database
+	//_ "github.com/pingcap/go-ycsb/db/rocksdb"
+	//// Register Spanner database
+	//_ "github.com/pingcap/go-ycsb/db/spanner"
+	//// Register pegasus database
+	//_ "github.com/pingcap/go-ycsb/db/pegasus"
+	//// Register sqlite database
+	//_ "github.com/pingcap/go-ycsb/db/sqlite"
+	//// Register cassandra database
+	//_ "github.com/pingcap/go-ycsb/db/cassandra"
+	//// Register mongodb database
+	//_ "github.com/pingcap/go-ycsb/db/mongodb"
 	// Register redis database
 	_ "github.com/pingcap/go-ycsb/db/redis"
-	// Register boltdb database
-	_ "github.com/pingcap/go-ycsb/db/boltdb"
-	// Register minio
-	_ "github.com/pingcap/go-ycsb/db/minio"
+	//// Register boltdb database
+	//_ "github.com/pingcap/go-ycsb/db/boltdb"
+	//// Register minio
+	//_ "github.com/pingcap/go-ycsb/db/minio"
 	// Register gomap
 	_ "github.com/pingcap/go-ycsb/db/gomap"
 )

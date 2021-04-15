@@ -1,3 +1,4 @@
+GO_BIN=~/go-pmem/bin/go
 FDB_CHECK := $(shell command -v fdbcli 2> /dev/null)
 ROCKSDB_CHECK := $(shell echo "int main() { return 0; }" | gcc -lrocksdb -x c++ -o /dev/null - 2>/dev/null; echo $$?)
 
@@ -18,9 +19,9 @@ default: build
 build: export GO111MODULE=on
 build:
 ifeq ($(TAGS),)
-	$(CGO_FLAGS) go build -o bin/go-ycsb cmd/go-ycsb/*
+	$(CGO_FLAGS) ${GO_BIN} build -txn -o bin/go-ycsb cmd/go-ycsb/*
 else
-	$(CGO_FLAGS) go build -tags "$(TAGS)" -o bin/go-ycsb cmd/go-ycsb/*
+	$(CGO_FLAGS) ${GO_BIN} build -txn -tags "$(TAGS)" -o bin/go-ycsb cmd/go-ycsb/*
 endif
 
 check:
