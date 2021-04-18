@@ -2,7 +2,6 @@ package hpredis
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
 	"gitlab.inf.telecom-sudparis.eu/YohanPipereau/go-redis-pmem/redis"
@@ -27,21 +26,17 @@ func (r *hpredis) CleanupThread(_ context.Context) {
 }
 
 func (r *hpredis) Read(ctx context.Context, table string, key string, fields []string) (map[string][]byte, error) {
+	var err error
 	data := make(map[string][]byte, len(fields))
 
-	res, err := r.op.Hget(table + "/" + key)
-	if err != nil {
-		return nil, err
+	for _, field := range fields {
+		data[field], err = r.op.Hget(table + "/" + key, field)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	err = json.Unmarshal(res, &data)
-	if err != nil {
-		return nil, err
-	}
-
-	// TODO: filter by fields
-
-	return data, err
+	return data, nil
 }
 
 func (r *hpredis) Scan(ctx context.Context, table string, startKey string, count int, fields []string) ([]map[string][]byte, error) {
@@ -49,29 +44,12 @@ func (r *hpredis) Scan(ctx context.Context, table string, startKey string, count
 }
 
 func (r *hpredis) Update(ctx context.Context, table string, key string, values map[string][]byte) error {
-	var data []byte
-	var err error
-
-	curVal := map[string][]byte{}
-	for k, v := range values {
-		curVal[k] = v
-	}
-	data, err = json.Marshal(curVal)
-	if err != nil {
-		return err
-	}
-
-	return r.op.Hset(table+"/"+key, string(data), 0)
+	return r.op.Hset(table+"/"+key, values)
 }
 
 func (r *hpredis) Insert(ctx context.Context, table string, key string, values map[string][]byte) error {
-	data, err := json.Marshal(values)
-	if err != nil {
-		fmt.Errorf("marshalling failed\n")
-		return err
-	}
-
-	return r.op.Hset(table+"/"+key, string(data), 0)
+	//return r.op.Hset(table+"/"+key, values)
+	return r.op.Hset(table+"/"+key, values)
 }
 
 func (r *hpredis) Delete(ctx context.Context, table string, key string) error {
