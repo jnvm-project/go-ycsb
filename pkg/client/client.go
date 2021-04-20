@@ -20,6 +20,7 @@ import (
 	"os"
 	"sync"
 	"time"
+	"runtime/debug"
 
 	"github.com/magiconair/properties"
 	"github.com/pingcap/go-ycsb/pkg/measurement"
@@ -166,6 +167,8 @@ func NewClient(p *properties.Properties, workload ycsb.Workload, db ycsb.DB) *Cl
 
 // Run runs the workload to the target DB, and blocks until all workers end.
 func (c *Client) Run(ctx context.Context) {
+	var stats debug.GCStats
+	var currentPause time.Duration
 	var wg sync.WaitGroup
 	threadCount := c.p.GetInt(prop.ThreadCount, 1)
 
@@ -187,6 +190,9 @@ func (c *Client) Run(ctx context.Context) {
 		}
 		// finish warming up
 		measurement.EnableWarmUp(false)
+		debug.ReadGCStats(&stats)
+		startPause := stats.PauseTotal
+		fmt.Printf("WarmupEnd: GC num=%d time=%d ns\n", stats.NumGC, startPause.Nanoseconds())
 
 		dur := c.p.GetInt64(prop.LogInterval, 10)
 		t := time.NewTicker(time.Duration(dur) * time.Second)
@@ -195,8 +201,14 @@ func (c *Client) Run(ctx context.Context) {
 		for {
 			select {
 			case <-t.C:
+				debug.ReadGCStats(&stats)
+				currentPause = stats.PauseTotal-startPause
+				fmt.Printf("GC num=%d time=%d time=%d ns\n", stats.NumGC, currentPause.Nanoseconds())
 				measurement.Output()
 			case <-measureCtx.Done():
+				debug.ReadGCStats(&stats)
+				currentPause = stats.PauseTotal-startPause
+				fmt.Printf("End: GC num=%d time=%d ns\n", stats.NumGC, currentPause.Nanoseconds())
 				return
 			}
 		}
