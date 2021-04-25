@@ -438,11 +438,6 @@ func (c *core) doTransactionRead(ctx context.Context, db ycsb.DB, state *coreSta
 }
 
 func (c *core) doTransactionReadModifyWrite(ctx context.Context, db ycsb.DB, state *coreState) error {
-	start := time.Now()
-	defer func() {
-		measurement.Measure("READ_MODIFY_WRITE", time.Now().Sub(start))
-	}()
-
 	r := state.r
 	keyNum := c.nextKeyNum(state)
 	keyName := c.buildKeyName(keyNum)
@@ -463,6 +458,10 @@ func (c *core) doTransactionReadModifyWrite(ctx context.Context, db ycsb.DB, sta
 	}
 	defer c.putValues(values)
 
+	start := time.Now()
+	defer func() {
+		measurement.Measure("READ_MODIFY_WRITE", time.Now().Sub(start))
+	}()
 	_, err := db.Read(ctx, c.table, keyName, fields)
 	//readValues, err := db.Read(ctx, c.table, keyName, fields)
 	if err != nil {
