@@ -27,6 +27,7 @@ import (
 func runClientCommandFunc(cmd *cobra.Command, args []string, doTransactions bool) {
 	dbName := args[0]
 
+	start_init := time.Now()
 	initialGlobal(dbName, func() {
 		doTransFlag := "true"
 		if !doTransactions {
@@ -55,6 +56,7 @@ func runClientCommandFunc(cmd *cobra.Command, args []string, doTransactions bool
 	fmt.Println("**********************************************")
 
 	c := client.NewClient(globalProps, globalWorkload, globalDB)
+	fmt.Printf("Init finished, takes %s\n", time.Now().Sub(start_init))
 	start := time.Now()
 	c.Run(globalContext)
 
