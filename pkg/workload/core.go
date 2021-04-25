@@ -424,13 +424,14 @@ func (c *core) doTransactionRead(ctx context.Context, db ycsb.DB, state *coreSta
 		fields = state.fieldNames
 	}
 
-	values, err := db.Read(ctx, c.table, keyName, fields)
+	//values, err := db.Read(ctx, c.table, keyName, fields)
+	_, err := db.Read(ctx, c.table, keyName, fields)
 	if err != nil {
 		return err
 	}
 
 	if c.dataIntegrity {
-		c.verifyRow(state, keyName, values)
+		//c.verifyRow(state, keyName, values)
 	}
 
 	return nil
@@ -462,7 +463,8 @@ func (c *core) doTransactionReadModifyWrite(ctx context.Context, db ycsb.DB, sta
 	}
 	defer c.putValues(values)
 
-	readValues, err := db.Read(ctx, c.table, keyName, fields)
+	_, err := db.Read(ctx, c.table, keyName, fields)
+	//readValues, err := db.Read(ctx, c.table, keyName, fields)
 	if err != nil {
 		return err
 	}
@@ -472,7 +474,7 @@ func (c *core) doTransactionReadModifyWrite(ctx context.Context, db ycsb.DB, sta
 	}
 
 	if c.dataIntegrity {
-		c.verifyRow(state, keyName, readValues)
+		//c.verifyRow(state, keyName, readValues)
 	}
 
 	return nil
