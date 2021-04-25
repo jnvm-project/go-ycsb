@@ -25,6 +25,7 @@ func (r *hpredis) InitThread(ctx context.Context, _ int, _ int) context.Context 
 func (r *hpredis) CleanupThread(_ context.Context) {
 }
 
+/*
 func (r *hpredis) Read(ctx context.Context, table string, key string, fields []string) (map[string][]byte, error) {
 	var err error
 	data := make(map[string][]byte, len(fields))
@@ -37,6 +38,10 @@ func (r *hpredis) Read(ctx context.Context, table string, key string, fields []s
 	}
 
 	return data, nil
+}
+*/
+func (r *hpredis) Read(ctx context.Context, table string, key string, fields []string) (map[string][]byte, error) {
+	return r.op.Hmget(table + "/" + key, fields);
 }
 
 func (r *hpredis) Scan(ctx context.Context, table string, startKey string, count int, fields []string) ([]map[string][]byte, error) {
