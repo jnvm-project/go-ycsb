@@ -7,6 +7,7 @@ import (
 	"gitlab.inf.telecom-sudparis.eu/YohanPipereau/go-redis-pmem/redis"
 	"github.com/magiconair/properties"
 	"github.com/pingcap/go-ycsb/pkg/ycsb"
+	"github.com/pingcap/go-ycsb/pkg/prop"
 )
 
 type hpredis struct {
@@ -66,7 +67,8 @@ type hpredisCreator struct{}
 func (r hpredisCreator) Create(p *properties.Properties) (ycsb.DB, error) {
 	prds := &hpredis{}
 
-	prds.op = redis.CreateOperations("/pmem0/coucou")
+	fmt.Printf("Creating a database of %d\n", int(p.GetInt64(prop.RecordCount, 0)))
+	prds.op = redis.CreateOperations("/pmem0/coucou", int(p.GetInt64(prop.RecordCount, 0)))
 
 	return prds, nil
 }
