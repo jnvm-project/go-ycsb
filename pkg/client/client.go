@@ -21,7 +21,9 @@ import (
 	"sync"
 	"time"
 	"runtime/debug"
+	"runtime"
 
+	"github.com/pingcap/go-ycsb/db/hpredis"
 	"github.com/magiconair/properties"
 	"github.com/pingcap/go-ycsb/pkg/measurement"
 	"github.com/pingcap/go-ycsb/pkg/prop"
@@ -169,6 +171,7 @@ func NewClient(p *properties.Properties, workload ycsb.Workload, db ycsb.DB) *Cl
 func (c *Client) Run(ctx context.Context) {
 	var stats debug.GCStats
 	var currentPause time.Duration
+	var m runtime.MemStats
 	var wg sync.WaitGroup
 	threadCount := c.p.GetInt(prop.ThreadCount, 1)
 
@@ -192,7 +195,15 @@ func (c *Client) Run(ctx context.Context) {
 		measurement.EnableWarmUp(false)
 		debug.ReadGCStats(&stats)
 		startPause := stats.PauseTotal
-		fmt.Printf("WarmupEnd: GC num=%d time=%d ns\n", stats.NumGC, startPause.Nanoseconds())
+
+		//Uncomment for no GCTotalTime
+		//fmt.Printf("WarmupEnd: GC num=%d time=%dns len0=%d, len1=%d\n",
+		//stats.NumGC, startPause.Nanoseconds(), hpredis.Len0, hpredis.Len1)
+
+		//Uncomment for GCTotalTime
+		runtime.ReadMemStats(&m)
+		fmt.Printf("WarmupEnd: GC num=%d time=%dns len0=%d, len1=%d GCTotalTime=%f TotalCPU=%f\n",
+		stats.NumGC, startPause.Nanoseconds(), hpredis.Len0, hpredis.Len1, m.GCTotalTime, m.TotalCpu)
 
 		dur := c.p.GetInt64(prop.LogInterval, 10)
 		t := time.NewTicker(time.Duration(dur) * time.Second)
@@ -203,12 +214,29 @@ func (c *Client) Run(ctx context.Context) {
 			case <-t.C:
 				debug.ReadGCStats(&stats)
 				currentPause = stats.PauseTotal-startPause
-				fmt.Printf("GC num=%d time=%d time=%d ns\n", stats.NumGC, currentPause.Nanoseconds())
+
+				runtime.ReadMemStats(&m)
+				//Uncomment for no GCTotalTime
+				//fmt.Printf("GC num=%d time=%dns, len0=%d, len1=%d Alloc=%dGiB GCPauseTotal=%dns, GCTotalTime=%f, TotalCpu=%f\n",
+				//stats.NumGC, currentPause.Nanoseconds(), hpredis.Len0, hpredis.Len1, m.Alloc/1024/1024/1024, m.PauseTotalNs)
+
+				//Uncomment for GCTotalTime
+				fmt.Printf("GC num=%d time=%dns, len0=%d, len1=%d Alloc=%dGiB GCPauseTotal=%dns, GCTotalTime=%f, TotalCpu=%f\n",
+				stats.NumGC, currentPause.Nanoseconds(), hpredis.Len0, hpredis.Len1, m.Alloc/1024/1024/1024, m.PauseTotalNs,
+				m.GCTotalTime, m.TotalCpu)
 				measurement.Output()
 			case <-measureCtx.Done():
 				debug.ReadGCStats(&stats)
 				currentPause = stats.PauseTotal-startPause
-				fmt.Printf("End: GC num=%d time=%d ns\n", stats.NumGC, currentPause.Nanoseconds())
+
+				//Uncomment for no GCTotalTime
+				//fmt.Printf("End: GC num=%d time=%dns, len0=%d, len1=%d\n",
+				//stats.NumGC, currentPause.Nanoseconds(), hpredis.Len0, hpredis.Len1)
+
+				//Uncomment for GCTotalTime
+				runtime.ReadMemStats(&m)
+				fmt.Printf("End: GC num=%d time=%dns, len0=%d, len1=%d GCTotalTime=%f TotalCPU=%f\n",
+				stats.NumGC, currentPause.Nanoseconds(), hpredis.Len0, hpredis.Len1, m.GCTotalTime, m.TotalCpu)
 				return
 			}
 		}
