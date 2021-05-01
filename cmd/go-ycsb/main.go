@@ -17,6 +17,7 @@ import (
 	"context"
 	"net/http"
 	_ "net/http/pprof"
+	"runtime/trace"
 	"os"
 	"os/signal"
 	"strings"
@@ -135,6 +136,10 @@ func initialGlobal(dbName string, onProperties func()) {
 
 func main() {
 	globalContext, globalCancel = context.WithCancel(context.Background())
+
+	f, _ := os.Create("/tmp/trace.out")
+	trace.Start(f)
+	defer trace.Stop()
 
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc,
