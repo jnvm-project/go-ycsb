@@ -52,7 +52,7 @@ require (
 	github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c // indirect
 	github.com/xdg/stringprep v1.0.0 // indirect
 	github.com/yuin/gopher-lua v0.0.0-20181031023651-12c4817b42c5 // indirect
-	gitlab.inf.telecom-sudparis.eu/YohanPipereau/go-redis-pmem v0.0.0-20210416222804-c903a91c6e8f // indirect
+	gitlab.inf.telecom-sudparis.eu/go-pmem/go-redis-pmem v0.0.0-20210501180958-043df8555edf // indirect
 	go.mongodb.org/mongo-driver v1.0.2
 	go.opencensus.io v0.22.2 // indirect
 	golang.org/x/crypto v0.0.0-20190911031432-227b76d455e7 // indirect

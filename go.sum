@@ -285,8 +285,8 @@ github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2 h1:eY9dn8+vbi4tKz5
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
 github.com/yuin/gopher-lua v0.0.0-20181031023651-12c4817b42c5 h1:d9vJ/8gXbVnNk8QFOxFZ7MN7TuHiuvolK1usz5KXVDo=
 github.com/yuin/gopher-lua v0.0.0-20181031023651-12c4817b42c5/go.mod h1:aEV29XrmTYFr3CiRxZeGHpkvbwq+prZduBqMaascyCU=
-gitlab.inf.telecom-sudparis.eu/YohanPipereau/go-redis-pmem v0.0.0-20210416222804-c903a91c6e8f h1:oAMJy+dNr885LQniX0W6pC5x7uew5bCbbPqjP6634pM=
-gitlab.inf.telecom-sudparis.eu/YohanPipereau/go-redis-pmem v0.0.0-20210416222804-c903a91c6e8f/go.mod h1:xLTPjjfcOXNC1hYCWVeJMCLpy8DMAZQWHDj8FA8150A=
+gitlab.inf.telecom-sudparis.eu/go-pmem/go-redis-pmem v0.0.0-20210501180958-043df8555edf h1:aMazyNRrEiNt7M0vXhONMx/lEPvPx/sOmJMWUJl4qo4=
+gitlab.inf.telecom-sudparis.eu/go-pmem/go-redis-pmem v0.0.0-20210501180958-043df8555edf/go.mod h1:Pi3Qh5ScElltAXwar1ZFtsuKuKStB05EIPUDEl6tH5c=
 go.etcd.io/bbolt v1.3.2 h1:Z/90sZLPOeCy2PwprqkFa25PdkusRzaj9P8zm/KNyvk=
 go.etcd.io/bbolt v1.3.2/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.mongodb.org/mongo-driver v1.0.2 h1:RwjK1tKt7VPqQh3tsjiEqKJg75GNhP/loch+PwRc4ig=

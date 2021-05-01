@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"gitlab.inf.telecom-sudparis.eu/YohanPipereau/go-redis-pmem/redis"
+	"gitlab.inf.telecom-sudparis.eu/go-pmem/go-redis-pmem/redis"
 	"github.com/magiconair/properties"
 	"github.com/pingcap/go-ycsb/pkg/ycsb"
 	"github.com/pingcap/go-ycsb/pkg/prop"
