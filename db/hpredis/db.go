@@ -10,6 +10,8 @@ import (
 	"github.com/pingcap/go-ycsb/pkg/prop"
 )
 
+var Len0, Len1 int
+
 type hpredis struct {
 	op redis.Operations
 }
@@ -55,6 +57,9 @@ func (r *hpredis) Update(ctx context.Context, table string, key string, values m
 
 func (r *hpredis) Insert(ctx context.Context, table string, key string, values map[string][]byte) error {
 	//return r.op.Hset(table+"/"+key, values)
+	Len0 = r.op.GetLen(0)
+	Len1 = r.op.GetLen(1)
+
 	return r.op.Hset(table+"/"+key, values)
 }
 
